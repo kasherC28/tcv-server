@@ -8,6 +8,7 @@ import { logger } from '../common/logger';
 const run = async () => {
   const exists = await usersRepo.findByEmail(env.SEED_ADMIN_EMAIL);
   const now = nowUtc();
+
   const payload = {
     name: env.SEED_ADMIN_NAME,
     f_name: env.SEED_ADMIN_F_NAME,
@@ -22,9 +23,17 @@ const run = async () => {
     country: env.SEED_ADMIN_COUNTRY,
     gender: Number(env.SEED_ADMIN_GENDER || Gender.M),
     recorded: now,
-    modified: now
+    modified: now,
   };
-  const user = exists ? await usersRepo.updateUser(exists.id, payload) : await usersRepo.createUser(payload);
+
+  const user = exists
+    ? await usersRepo.updateUser(exists.id, payload)
+    : await usersRepo.createUser(payload);
+
+  if (!user) {
+    throw new Error('Failed to seed admin');
+  }
+
   logger.info({ id: user.id, email: user.email }, 'admin seeded');
   process.exit(0);
 };
