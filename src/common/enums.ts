@@ -20,3 +20,9 @@ export enum ContactTopic {
   GENERAL_QUESTION = 4,
   FEEDBACK = 5
 }
+
+export enum CheckoutStatus {
+  PENDING = 1,
+  CONFIRMED = 2,
+  REJECTED = 3
+}

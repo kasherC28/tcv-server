@@ -1,4 +1,4 @@
-import { ContactTopic, Gender, Role, UserStatus } from './enums';
+import { CheckoutStatus, ContactTopic, Gender, Role, UserStatus } from './enums';
 
 export interface UserRow {
   id: number;
@@ -46,6 +46,21 @@ export interface ContactRow {
   contact: string;
   subject: ContactTopic;
   message: string;
+  recorded: number;
+  modified: number;
+}
+
+export interface CheckoutRequestRow {
+  id: number;
+  user_id: number;
+  status: CheckoutStatus;
+  payment_method: string;
+  items: Array<Record<string, unknown>>;
+  receipt_sent_whatsapp: number;
+  receipt_sent_email: number;
+  notes: string | null;
+  confirmed_by: number | null;
+  confirmed_at: number | null;
   recorded: number;
   modified: number;
 }
