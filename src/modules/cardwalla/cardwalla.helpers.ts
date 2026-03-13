@@ -13,5 +13,13 @@ export const buildTransactionId = () =>
 export const asArray = <T>(value: T | T[] | undefined): T[] =>
   Array.isArray(value) ? value : value ? [value] : [];
 
-export const textValue = (value: unknown) =>
-  value == null ? '' : String(value);
+export const textValue = (value: unknown): string => {
+  if (value == null) return '';
+  if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean') {
+    return String(value);
+  }
+  if (typeof value === 'object' && '#text' in (value as Record<string, unknown>)) {
+    return textValue((value as Record<string, unknown>)['#text']);
+  }
+  return '';
+};

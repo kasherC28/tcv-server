@@ -1,10 +1,21 @@
 import { query } from '../../config/db';
 import { CheckoutRequestRow } from '../../common/types';
 
+const asFlag = (value: unknown) => (value ? 1 : 0);
+
 export const createCheckoutRequest = async (data: Record<string, unknown>) =>
   (await query<CheckoutRequestRow>(
     'insert into checkout_requests (user_id, status, payment_method, items, receipt_sent_whatsapp, receipt_sent_email, notes, recorded, modified) values ($1,$2,$3,$4,$5,$6,$7,$8,$8) returning *',
-    [data.user_id, data.status, data.payment_method, JSON.stringify(data.items), data.receipt_sent_whatsapp, data.receipt_sent_email, data.notes || null, data.recorded],
+    [
+      data.user_id,
+      data.status,
+      data.payment_method,
+      JSON.stringify(data.items),
+      asFlag(data.receipt_sent_whatsapp),
+      asFlag(data.receipt_sent_email),
+      data.notes || null,
+      data.recorded,
+    ],
   )).rows[0];
 
 export const getCheckoutRequest = async (id: number) =>
